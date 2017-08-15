@@ -1,63 +1,86 @@
 (function($) {
 
-	function changeBody(html){
-	 	$('body').empty();
-	 	//const startHTML = '<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>';
-	 	$('body').append(html);		
-	}
+	// function changeBody(html){
+	//  	$('body').empty();
+	//  	//const startHTML = '<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>';
+	//  	$('body').append(html);		
+	// }
 
-	changeBody('<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>');
+	// changeBody('<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>');
 
- 	$('.button').on('click',()=>{
- 		test();
+ 	$('#start .button').on('click',()=>{
+ 		 $('#start').hide();
+         $('#board').show();
+         playing();
  	});
 
- 	
+    $('#finish .button').on('click',()=>{
+        showOneTemplate('#board');
+        clearBoard();
+        playing();
+
+    });
+	showOneTemplate('#start');
+
+    function clearBoard(){
+        $('.boxes li').removeClass('box-filled-1');
+        $('.boxes li').removeClass('box-filled-2');
+        $('.boxes li').css("background-image",'');
+        $('#player1').removeClass('active');
+        $('#player2').removeClass('active');
+    }
+
+    function showOneTemplate(targetTemplate){
+        templates = ['#start','#board','#finish']
+        templates.forEach((template)=>$(template).hide());
+        $(targetTemplate).show();
+    
+    }
 
 
-	function test(){
-		let score= {'X':0,'O':0};
- 		//let score= {'X':{},'O':0};
- 		let moves = 0;
- 		let turn = 'O';
+	function playing(){
+        //initiate the value
+        const wins = [7, 56, 448, 73, 146, 292, 273, 84];
 
- 		changeBody('<div class="board" id="board"><header><h1>Tic Tac Toe</h1><ul><li class="players player1" id="player1"><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-200.000000, -60.000000)" fill="#000000"><g transform="translate(200.000000, 60.000000)"><path d="M21 36.6L21 36.6C29.6 36.6 36.6 29.6 36.6 21 36.6 12.4 29.6 5.4 21 5.4 12.4 5.4 5.4 12.4 5.4 21 5.4 29.6 12.4 36.6 21 36.6L21 36.6ZM21 42L21 42C9.4 42 0 32.6 0 21 0 9.4 9.4 0 21 0 32.6 0 42 9.4 42 21 42 32.6 32.6 42 21 42L21 42Z"/></g></g></g></svg></li><li class="players player2" id="player2"><svg xmlns="http://www.w3.org/2000/svg" width="42" height="43" viewBox="0 0 42 43" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-718.000000, -60.000000)" fill="#000000"><g transform="translate(739.500000, 81.500000) rotate(-45.000000) translate(-739.500000, -81.500000) translate(712.000000, 54.000000)"><path d="M30 30.1L30 52.5C30 53.6 29.1 54.5 28 54.5L25.5 54.5C24.4 54.5 23.5 53.6 23.5 52.5L23.5 30.1 2 30.1C0.9 30.1 0 29.2 0 28.1L0 25.6C0 24.5 0.9 23.6 2 23.6L23.5 23.6 23.5 2.1C23.5 1 24.4 0.1 25.5 0.1L28 0.1C29.1 0.1 30 1 30 2.1L30 23.6 52.4 23.6C53.5 23.6 54.4 24.5 54.4 25.6L54.4 28.1C54.4 29.2 53.5 30.1 52.4 30.1L30 30.1Z"/></g></g></g></svg></li></ul></header><ul class="boxes"><li class="box"></li><li class="box"></li><li class="box"></li><li class="box"></li><li class="box"></li><li class="box"></li><li class="box"></li><li class="box"></li> <li class="box"></li></ul</div>');	
- 		const wins = [7, 56, 448, 73, 146, 292, 273, 84];
-
+        let score= {'X':0,'O':0};
+        let moves = 0;
+        let turn = 'O';     
+        $('#player1').addClass('active');
+        let players = {
+            'X':{'background-image':'url(img/x.svg)','id':'#player2','box-style':'box-filled-2'},
+            'O':{'background-image':'url(img/o.svg)','id':'#player1','box-style':'box-filled-1'}
+        }		
  		let cells = $('.boxes .box');
  		for (let i=0;i<9;i++){
 			let value = Math.pow(2,i);
 			$(cells[i]).attr("value",value);
 		}
-
- 		$('.boxes').on('click',(event)=>{
+        this.test= 1;
+ 		$('.boxes').click(function(event){    
 			score[turn] = score[turn] + event.target.value;
 			moves+=1; 
 			if (win(score[turn])) {
-            	changeBody('<div class="screen screen-win" id="finish">  <header>    <h1>Tic Tac Toe</h1>    <p class="message"></p>    <a href="#" class="button">New game</a></header></div>');	
-            	turn === 'O'?$('#finish').addClass('screen-win-one'):('#finish').addClass('screen-win-two');
-        	} else if (moves === 9) {
- 				changeBody('<div class="screen screen-win" id="finish">  <header>    <h1>Tic Tac Toe</h1>    <p class="message"></p>    <a href="#" class="button">New game</a></header></div>');	
+            	showOneTemplate('#finish');
+                turn === 'O'?$('#finish').addClass('screen-win-one'):$('#finish').addClass('screen-win-two');
+                score= {'X':0,'O':0};
+                moves = 0;
+                turn = 'O';    
+            } else if (moves === 9) {
+ 	            showOneTemplate('#finish');
+                $('#finish').removeClass('screen-win-one');
+                $('#finish').removeClass('screen-win-two');    
+                $('#finish').addClass('screen-win-tie');	
+                score= {'X':0,'O':0};
+                moves = 0;
+                turn = 'O';                  		
             	
         	} else {
-        		if (turn === 'O'){
-        			$(event.target).css("background-image",'url(img/o.svg)');
-        			$(event.target).attr("clicked",1);
-        			$(event.target).addClass('box-filled-1');
-        			$('#player1').removeClass('active');
-        			$('#player2').addClass('active');
-
-        			turn = 'X';
-        		}
-        		else{
-        			$(event.target).css("background-image",'url(img/x.svg)');
-        			$(event.target).attr("clicked",1);
-        			$('#player2').removeClass('active');
-        			$('#player1').addClass('active');
-        			$(event.target).addClass('box-filled-2');
-        			turn = 'O';
-        		}
-
+                $(event.target).css("background-image",players[turn]['background-image']);
+                $(event.target).attr("clicked",1);
+                $(event.target).addClass(players[turn]['box-style']);
+                $(players[turn]['id']).removeClass('active');
+                turn= turn==='O'?'X':'O';
+                $(players[turn]['id']).addClass('active');
         	}
 
 		});
