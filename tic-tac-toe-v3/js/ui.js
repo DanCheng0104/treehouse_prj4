@@ -55,24 +55,25 @@
 			let value = Math.pow(2,i);
 			$(cells[i]).attr("value",value);
 		}
-        this.test= 1;
+
+        function removeListeners(){
+            $('.boxes').off("click");
+            $('.boxes').off("mouseover");
+            $('.boxes').off("mouseout");       
+        }
  		$('.boxes').click(function(event){    
 			score[turn] = score[turn] + event.target.value;
 			moves+=1; 
 			if (win(score[turn])) {
             	showOneTemplate('#finish');
                 turn === 'O'?$('#finish').addClass('screen-win-one'):$('#finish').addClass('screen-win-two');
-                score= {'X':0,'O':0};
-                moves = 0;
-                turn = 'O';    
+                removeListeners(); 
             } else if (moves === 9) {
  	            showOneTemplate('#finish');
                 $('#finish').removeClass('screen-win-one');
                 $('#finish').removeClass('screen-win-two');    
                 $('#finish').addClass('screen-win-tie');	
-                score= {'X':0,'O':0};
-                moves = 0;
-                turn = 'O';                  		
+                removeListeners();             		
             	
         	} else {
                 $(event.target).css("background-image",players[turn]['background-image']);
@@ -99,7 +100,13 @@
         		}
 		});		
 		function win(score){
-			return wins.indexOf(score) >-1?true:false;
+			
+            for (let i = 0; i < wins.length; i += 1) {
+                if ((wins[i] & score) === wins[i]) {
+                    return true;
+                }
+            }
+            return false;
 		}
 
 	}
