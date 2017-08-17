@@ -1,17 +1,9 @@
 (function($) {
-
-	// function changeBody(html){
-	//  	$('body').empty();
-	//  	//const startHTML = '<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>';
-	//  	$('body').append(html);		
-	// }
-
-	// changeBody('<div class="screen screen-start" id="start"><header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header></div>');
-
  	$('#start .button').on('click',()=>{
  		 $('#start').hide();
          $('#board').show();
-         playing();
+         let person = prompt("Please enter your name", "Harry Potter");
+         playing(person);
  	});
 
     $('#finish .button').on('click',()=>{
@@ -38,7 +30,7 @@
     }
 
 
-	function playing(){
+	function playing(person){
         //initiate the value
         const wins = [7, 56, 448, 73, 146, 292, 273, 84];
 
@@ -46,11 +38,13 @@
         let moves = 0;
         let turn = 'O';     
         $('#player1').addClass('active');
+        $('h2').html(person);
         let players = {
             'X':{'background-image':'url(img/x.svg)','id':'#player2','box-style':'box-filled-2'},
             'O':{'background-image':'url(img/o.svg)','id':'#player1','box-style':'box-filled-1'}
         }		
  		let cells = $('.boxes .box');
+        let lists = [0,1,2,3,4,5,6,7,8];
  		for (let i=0;i<9;i++){
 			let value = Math.pow(2,i);
 			$(cells[i]).attr("value",value);
@@ -62,6 +56,8 @@
             $('.boxes').off("mouseout");       
         }
  		$('.boxes').click(function(event){    
+            let oVal;
+            let xVal;
 			score[turn] = score[turn] + event.target.value;
 			moves+=1; 
 			if (win(score[turn])) {
@@ -79,12 +75,22 @@
                 $(event.target).css("background-image",players[turn]['background-image']);
                 $(event.target).attr("clicked",1);
                 $(event.target).addClass(players[turn]['box-style']);
+                oVal = $(event.target).attr("order");
+                computerPlaying(clickedVal);
                 $(players[turn]['id']).removeClass('active');
                 turn= turn==='O'?'X':'O';
                 $(players[turn]['id']).addClass('active');
         	}
 
 		});
+
+        function computerPlaying(oVal){
+            lists.splice(oVal);
+            let yVal = Math.floor(Math.random( ) *lists.length );
+            $( ".boxes li[order=" + yVal + "]" ).attr("clicked",1);
+        }
+
+
 
 		$('.boxes').on('mouseover',(event)=>{
         		if (!$(event.target).attr('clicked')){
