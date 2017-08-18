@@ -46,15 +46,23 @@
         }		
  		let cells = $('.boxes .box');
         let lists = [0,1,2,3,4,5,6,7,8];
- 		for (let i=0;i<9;i++){
-			let value = Math.pow(2,i);
-			$(cells[i]).attr("value",value);
-		}
+        lists.forEach(list=>{
+            let value = Math.pow(2,list);
+            $(cells[list]).attr("value",value);
+        })
+ 	// 	for (let i=0;i<9;i++){
+		// 	let value = Math.pow(2,i);
+		// 	$(cells[i]).attr("value",value);
+		// }
 
         function removeListeners(){
             $('.boxes').off("click");
             $('.boxes').off("mouseover");
             $('.boxes').off("mouseout");       
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
  		$('.boxes').click(function(event){    
             let oVal;
@@ -66,7 +74,7 @@
             	showOneTemplate('#finish');
                 turn === 'O'?$('#finish').addClass('screen-win-one'):$('#finish').addClass('screen-win-two');
                 removeListeners(); 
-            } else if (moves === 9) {
+            } else if (moves > 9) {
  	            showOneTemplate('#finish');
                 $('#finish').removeClass('screen-win-one');
                 $('#finish').removeClass('screen-win-two');    
@@ -87,8 +95,8 @@
 
 		});
 
-        function computerPlaying(oVal){
-            
+        async function computerPlaying(oVal){
+
             let yVal = lists[Math.floor(Math.random( ) *lists.length )];
             $( ".boxes li[order=" + yVal + "]" ).attr("clicked",1);
             $( ".boxes li[order=" + yVal + "]" ).css("background-image",players['X']['background-image']);
@@ -102,6 +110,7 @@
                 $('#finish').addClass('screen-win-two');
                 removeListeners(); 
             }
+            await sleep(2000);
         }
 
 
