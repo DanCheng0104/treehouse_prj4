@@ -19,7 +19,8 @@
         $('.boxes li').removeClass('box-filled-2');
         $('.boxes li').css("background-image",'');
         $('#player1').removeClass('active');
-        $('#player2').removeClass('active');
+        $('#player2').removeClass('active'); 
+        $('.boxes li').removeAttr('clicked');
     }
 
     function showOneTemplate(targetTemplate){
@@ -59,7 +60,8 @@
             let oVal;
             let xVal;
 			score[turn] = score[turn] + event.target.value;
-			moves+=1; 
+			moves+=2; 
+            console.log(lists);
 			if (win(score[turn])) {
             	showOneTemplate('#finish');
                 turn === 'O'?$('#finish').addClass('screen-win-one'):$('#finish').addClass('screen-win-two');
@@ -75,19 +77,31 @@
                 $(event.target).css("background-image",players[turn]['background-image']);
                 $(event.target).attr("clicked",1);
                 $(event.target).addClass(players[turn]['box-style']);
-                oVal = $(event.target).attr("order");
-                computerPlaying(clickedVal);
-                $(players[turn]['id']).removeClass('active');
-                turn= turn==='O'?'X':'O';
-                $(players[turn]['id']).addClass('active');
+                oVal = parseInt($(event.target).attr("order"));
+                lists.splice(lists.indexOf(oVal),1);
+                $(players['O']['id']).removeClass('active');
+                $(players['X']['id']).addClass('active');
+                computerPlaying(oVal);
+
         	}
 
 		});
 
         function computerPlaying(oVal){
-            lists.splice(oVal);
-            let yVal = Math.floor(Math.random( ) *lists.length );
+            
+            let yVal = lists[Math.floor(Math.random( ) *lists.length )];
             $( ".boxes li[order=" + yVal + "]" ).attr("clicked",1);
+            $( ".boxes li[order=" + yVal + "]" ).css("background-image",players['X']['background-image']);
+            $( ".boxes li[order=" + yVal + "]" ).addClass(players['X']['box-style']);
+            lists.splice(lists.indexOf(yVal),1);
+            $(players['X']['id']).removeClass('active');
+            $(players['O']['id']).addClass('active');
+            score['X'] = score['X'] + parseInt($( ".boxes li[order=" + yVal + "]" ).attr('value'));
+            if (win(score['X'])) {
+                showOneTemplate('#finish');
+                $('#finish').addClass('screen-win-two');
+                removeListeners(); 
+            }
         }
 
 
