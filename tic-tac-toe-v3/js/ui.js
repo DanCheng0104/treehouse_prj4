@@ -58,9 +58,7 @@
             $('.boxes').off("mouseout");       
         }
 
-        // function sleep(ms) {
-        //     return new Promise(resolve => setTimeout(resolve, ms));
-        // }
+
  		$('.boxes').click(function(event){  
             let person = $('h2').html();  
             let oVal;
@@ -74,11 +72,13 @@
                      $('.name').remove();
                      $('#finish').removeClass('screen-win-two');
                     $('#finish').addClass('screen-win-one');
+                    $('#finish').removeClass('screen-win-tie');    
                     $(`<h4 class='name'>${person} wins</h4>`).insertAfter('#finish h1');;
                 }
                 else {
                     $('#finish').removeClass('screen-win-one');
                     $('#finish').addClass('screen-win-two');
+                    $('#finish').removeClass('screen-win-tie');    
                     $('.name').remove();
                 }
                 removeListeners(); 
@@ -115,9 +115,10 @@
             $(players['O']['id']).addClass('active');
             score['X'] = score['X'] + parseInt($( ".boxes li[order=" + yVal + "]" ).attr('value'));
             if (win(score['X'])) {
+                showOneTemplate('#finish');
                 $('#finish').removeClass('screen-win-one');
-                $('#finish').removeClass('screen-win-two');    
-                $('#finish').addClass('screen-win-tie');    
+                $('#finish').addClass('screen-win-two');    
+                $('#finish').removeClass('screen-win-tie');    
                 $('.name').remove();
                 removeListeners(); 
             }
