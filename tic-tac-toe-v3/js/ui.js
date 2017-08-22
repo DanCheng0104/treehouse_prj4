@@ -34,6 +34,7 @@
 	function playing(person){
         //initiate the value
         const wins = [7, 56, 448, 73, 146, 292, 273, 84];
+        //let person=person;
 
         let score= {'X':0,'O':0};
         let moves = 0;
@@ -50,10 +51,6 @@
             let value = Math.pow(2,list);
             $(cells[list]).attr("value",value);
         })
- 	// 	for (let i=0;i<9;i++){
-		// 	let value = Math.pow(2,i);
-		// 	$(cells[i]).attr("value",value);
-		// }
 
         function removeListeners(){
             $('.boxes').off("click");
@@ -61,10 +58,11 @@
             $('.boxes').off("mouseout");       
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
- 		$('.boxes').click(function(event){    
+        // function sleep(ms) {
+        //     return new Promise(resolve => setTimeout(resolve, ms));
+        // }
+ 		$('.boxes').click(function(event){  
+            let person = $('h2').html();  
             let oVal;
             let xVal;
 			score[turn] = score[turn] + event.target.value;
@@ -72,13 +70,24 @@
             console.log(lists);
 			if (win(score[turn])) {
             	showOneTemplate('#finish');
-                turn === 'O'?$('#finish').addClass('screen-win-one'):$('#finish').addClass('screen-win-two');
+                if (turn === 'O'){
+                     $('.name').remove();
+                     $('#finish').removeClass('screen-win-two');
+                    $('#finish').addClass('screen-win-one');
+                    $(`<h4 class='name'>${person} wins</h4>`).insertAfter('#finish h1');;
+                }
+                else {
+                    $('#finish').removeClass('screen-win-one');
+                    $('#finish').addClass('screen-win-two');
+                    $('.name').remove();
+                }
                 removeListeners(); 
             } else if (moves > 9) {
  	            showOneTemplate('#finish');
                 $('#finish').removeClass('screen-win-one');
                 $('#finish').removeClass('screen-win-two');    
                 $('#finish').addClass('screen-win-tie');	
+                $('.name').remove();
                 removeListeners();             		
             	
         	} else {
@@ -95,7 +104,7 @@
 
 		});
 
-        async function computerPlaying(oVal){
+        function computerPlaying(oVal){
 
             let yVal = lists[Math.floor(Math.random( ) *lists.length )];
             $( ".boxes li[order=" + yVal + "]" ).attr("clicked",1);
@@ -106,11 +115,13 @@
             $(players['O']['id']).addClass('active');
             score['X'] = score['X'] + parseInt($( ".boxes li[order=" + yVal + "]" ).attr('value'));
             if (win(score['X'])) {
-                showOneTemplate('#finish');
-                $('#finish').addClass('screen-win-two');
+                $('#finish').removeClass('screen-win-one');
+                $('#finish').removeClass('screen-win-two');    
+                $('#finish').addClass('screen-win-tie');    
+                $('.name').remove();
                 removeListeners(); 
             }
-            await sleep(2000);
+            //await sleep(2000);
         }
 
 

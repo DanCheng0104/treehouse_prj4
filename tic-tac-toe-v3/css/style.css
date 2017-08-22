@@ -14,9 +14,10 @@ h1 {
   margin: 0 auto;
   text-align: left;
   width: 1.875em; }
-h2{
-  margin-left: 16%;  
-}
+/*.name{
+  margin-left: 16%; 
+  width: 6em; 
+}*/
 
 .button {
   background: #fff;
