@@ -6,7 +6,7 @@
          $('#no').remove();
          $('p').remove();
          let html =`<p>
-            Player1: <input type="text" id="p1" value="Mickey">
+            Player1: <input type="text" id="p1" value="player1">
          </p><a href="#" id='startBtn' class="button">Start game</a>`
          $(html).insertAfter('#start h1');
          $('#startBtn').on('click',()=>{
@@ -23,8 +23,8 @@
          $('#no').remove();
          $('p').remove();
          let html =`<p>
-            Player1: <input type="text" id="p1" value="Nate">
-            Player2: <input type="text" id="p2" value="Mickey">
+            Player1: <input type="text" id="p1" value="player1">
+            Player2: <input type="text" id="p2" value="player2">
          </p><a href="#" id='startBtn' class="button">Start game</a>`
          $(html).insertAfter('#start h1');
          $('#startBtn').on('click',()=>{
