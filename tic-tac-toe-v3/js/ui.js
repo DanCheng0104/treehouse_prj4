@@ -34,7 +34,6 @@
 	function playing(person){
         //initiate the value
         const wins = [7, 56, 448, 73, 146, 292, 273, 84];
-        //let person=person;
 
         let score= {'X':0,'O':0};
         let moves = 0;
